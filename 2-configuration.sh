@@ -40,7 +40,7 @@ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 # ------------------------------------------------------
 # Set Keyboard
 # ------------------------------------------------------
-echo "FONT=ter-v18n" >> /etc/vconsole.conf
+#echo "FONT=ter-v18n" >> /etc/vconsole.conf
 #echo "KEYMAP=$keyboardlayout" >> /etc/vconsole.conf
 
 # ------------------------------------------------------
@@ -132,7 +132,7 @@ console-mode keep" > /boot/loader/loader.conf
 if nvidia; then
     sed -i 's/^MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /mnt/etc/mkinitcpio.conf
 fi
-sed -i 's/BINARIES=()/BINARIES=(setfont)/g' /mnt/etc/mkinitcpio.conf
+#sed -i 's/BINARIES=()/BINARIES=(setfont)/g' /mnt/etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 # ------------------------------------------------------
