@@ -99,7 +99,7 @@ clear
 #read -p "Open sudoers now?" c
 #EDITOR=nvim sudo -E visudo
 usermod -aG wheel $username
-sed -i 's/#%wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 # ------------------------------------------------------
 # nobeep
 # ------------------------------------------------------
