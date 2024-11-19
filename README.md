@@ -1,4 +1,4 @@
-# Arch Install Script to be built on so I don't forget that one config variable I set before ritualistically eviscerating my OS (usually on a monthly or bimonthly basis)
+# Arch Install Script so I don't forget that one config variable I set before ritualistically eviscerating my OS
 
 This is a bash based Arch Linux installation script with EFI boot loader and ext4 partition prepared for me.
 
