@@ -22,6 +22,7 @@ fd
 wl-clipboard
 #browser
 firefox
+zen-browser-avx2-bin
 #version control
 chezmoi
 git
@@ -33,12 +34,10 @@ tldr
 texinfo
 #hyprland
 hyprland
-sddm
 dunst
 #misc
 mlocate
 thunderbird
-ttf-meslo-nerd
 linux-headers
 xdg-user-dirs
 #sound

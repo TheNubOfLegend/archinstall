@@ -88,6 +88,11 @@ systemctl enable NetworkManager
 sed -i 's/--sort age/--sort rate/g' /etc/xdg/reflector/reflector.conf
 sed -i 's/--latest 5/--latest 10/g' /etc/xdg/reflector/reflector.conf
 systemctl enable reflector.timer
+systemctl start reflector.timer
+systemctl enable reflector.service
+systemctl enable paccache.timer
+systemctl start paccache.timer
+systemctl enable paccache.service
 #systemctl enable acpid
 
 # ------------------------------------------------------
