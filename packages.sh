@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the path to the list of packages
-vital_package_list_dir="$PWD/vital_packages.list"
-package_list_dir="$PWD/packages.list"
+universal_package_list_dir="$PWD/packages/universal.list"
+package_list_dir="$PWD/packages/$(cat /etc/hostname).list"
 package_list=()
 script_list=()
 
@@ -14,7 +14,7 @@ while read -r line; do
     elif [[ ! "$line" =~ ^#.*$ ]] && [ ! -z "$line" ]; then
         package_list+=($line)
     fi
-done < <(cat $package_list_dir && cat $vital_package_list_dir)
+done < <(cat $package_list_dir && cat $universal_package_list_dir)
 
 echo "Installing needed: "
 echo ${package_list[@]}

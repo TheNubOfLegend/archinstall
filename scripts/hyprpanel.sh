@@ -2,7 +2,7 @@
 
 #Dependencies
 sh ./bun.sh
-sudo pacman -S --no-confirm networkmanager gnome-bluetooth-3.0 pipewire libgtop bluez bluez-utils wl-clipboard dart-sass brightnessctl
+sudo pacman -S --no-confirm libdbusmenu-gtk3 networkmanager gnome-bluetooth-3.0 pipewire libgtop bluez bluez-utils wl-clipboard dart-sass brightnessctl
 
 if [ ! -d "$HOME/.local/lib" ]; then
     mkdir $HOME/.local/lib

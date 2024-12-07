@@ -21,16 +21,6 @@ ln -sf /usr/share/zoneinfo/$zoneinfo /etc/localtime
 hwclock --systohc
 
 # ------------------------------------------------------
-# Synchronize mirrors
-# ------------------------------------------------------
-pacman -Syy
-
-# ------------------------------------------------------
-# Install Packages
-# ------------------------------------------------------
-source "$(dirname "${BASH_SOURCE[0]}")/packages.sh"
-
-# ------------------------------------------------------
 # set lang utf8 US
 # ------------------------------------------------------
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -67,6 +57,17 @@ echo "$hostname" >> /etc/hostname
 #echo "127.0.1.1 $hostname.localdomain $hostname" >> /etc/hosts
 clear
 
+#NOTE: must come after hostname for current package script
+# ------------------------------------------------------
+# Synchronize mirrors
+# ------------------------------------------------------
+pacman -Syy
+
+# ------------------------------------------------------
+# Install Packages
+# ------------------------------------------------------
+source "$(dirname "${BASH_SOURCE[0]}")/packages.sh"
+
 # ------------------------------------------------------
 # Set Root Password
 # ------------------------------------------------------
@@ -88,13 +89,11 @@ systemctl enable NetworkManager
 sed -i 's/--sort age/--sort rate/g' /etc/xdg/reflector/reflector.conf
 sed -i 's/--latest 5/--latest 10/g' /etc/xdg/reflector/reflector.conf
 
-systemctl enable reflector.timer
-systemctl start reflector.timer
-systemctl enable reflector.service
+systemctl enable reflector.timer --now
+systemctl enable reflector.service --now
 
-systemctl enable paccache.timer
-systemctl start paccache.timer
-systemctl enable paccache.service
+systemctl enable paccache.timer --now
+systemctl enable paccache.service --now
 #systemctl enable acpid
 
 # ------------------------------------------------------
@@ -163,8 +162,6 @@ echo "| (_| | (_) | | | |  __/ "
 echo " \__,_|\___/|_| |_|\___| "
 echo "                         "
 echo ""
-echo "Please find the following additional installation scripts in your home directory:"
-echo "- yay AUR helper: 3-yay.sh"
 echo ""
 echo "Please exit & shutdown (shutdown -h now), remove the installation media and start again."
 echo "Important: Activate WIFI after restart with nmtui."

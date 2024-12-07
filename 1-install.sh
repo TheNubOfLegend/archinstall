@@ -85,9 +85,8 @@ mkdir /mnt/archinstall
 cp 2-configuration.sh /mnt/archinstall/
 cp 3-yay.sh /mnt/archinstall/
 cp vital_packages.list /mnt/archinstall
-cp packages.list /mnt/archinstall
-cp packages.sh /mnt/archinstall
-#cp snapshot.sh /mnt/archinstall/
+cp -r ./packages /mnt/archinstall
+cp -r ./scripts /mnt/archinstall
 
 # ------------------------------------------------------
 # Chroot to installed sytem
@@ -95,4 +94,3 @@ cp packages.sh /mnt/archinstall
 export nvidia
 export root
 arch-chroot /mnt ./archinstall/2-configuration.sh
-
