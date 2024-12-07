@@ -47,20 +47,20 @@ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 # Set hostname and localhost
 # ------------------------------------------------------
 while true
-	do
-		read -p "Please name your machine: " hostname
-		# hostname regex (!!couldn't find spec for computer name!!)
-		if [[ "${hostname,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]
-		then
-			break
-		fi
-		# if validation fails allow the user to force saving of the hostname
-		read -p "Hostname doesn't seem correct. Do you still want to save it? (y/n): " force 
-		if [[ "${force,,}" = "y" ]]
-		then
-			break
-		fi
-	done
+do
+    read -p "Please name your machine: " hostname
+    # hostname regex (!!couldn't find spec for computer name!!)
+    if [[ "${hostname,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]
+    then
+        break
+    fi
+    # if validation fails allow the user to force saving of the hostname
+    read -p "Hostname doesn't seem correct. Do you still want to save it? (y/n): " force 
+    if [[ "${force,,}" = "y" ]]
+    then
+        break
+    fi
+done
 echo "$hostname" >> /etc/hostname
 #echo "127.0.0.1 localhost" >> /etc/hosts
 #echo "::1       localhost" >> /etc/hosts
@@ -84,29 +84,32 @@ passwd $username
 # Enable Services
 # ------------------------------------------------------
 systemctl enable NetworkManager
-#systemctl enable cups.service
+
 sed -i 's/--sort age/--sort rate/g' /etc/xdg/reflector/reflector.conf
 sed -i 's/--latest 5/--latest 10/g' /etc/xdg/reflector/reflector.conf
+
 systemctl enable reflector.timer
 systemctl start reflector.timer
 systemctl enable reflector.service
+
 systemctl enable paccache.timer
 systemctl start paccache.timer
 systemctl enable paccache.service
 #systemctl enable acpid
 
 # ------------------------------------------------------
+# Pacman
+# ------------------------------------------------------
+sed -i 's/#VerbosePkgLists/VerbosePkgLists/' /etc/pacman.conf
+sed -i 's/#Color/Color/' /etc/pacman.conf
+sed -i 's/#Misc options/#Misc options\nILoveCandy/' /etc/pacman.conf
+
+# ------------------------------------------------------
 # Add user to wheel
 # ------------------------------------------------------
-clear
-#echo "Uncomment %wheel group in sudoers (around line 85):"
-#echo "Before: #%wheel ALL=(ALL:ALL) ALL"
-#echo "After:  %wheel ALL=(ALL:ALL) ALL"
-#echo ""
-#read -p "Open sudoers now?" c
-#EDITOR=nvim sudo -E visudo
 usermod -aG wheel $username
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
 # ------------------------------------------------------
 # nobeep
 # ------------------------------------------------------
@@ -132,12 +135,11 @@ default @saved
 console-mode keep" > /boot/loader/loader.conf
 
 # ------------------------------------------------------
-# Add setfont (& nvidia for hyprland!!!!!!!) to mkinitcpio
+# Add nvidia for hyprland to mkinitcpio
 # ------------------------------------------------------
 if nvidia; then
     sed -i 's/^MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /mnt/etc/mkinitcpio.conf
 fi
-#sed -i 's/BINARIES=()/BINARIES=(setfont)/g' /mnt/etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 # ------------------------------------------------------
