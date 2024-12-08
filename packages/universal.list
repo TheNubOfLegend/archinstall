@@ -4,6 +4,7 @@
 acpi
 aerc
 alsa-utils
+archlinux-keyring
 base
 base-devel
 btop
@@ -56,6 +57,7 @@ python-pip
 reflector
 ripgrep
 rmlint
+rustup
 slurp
 speedcrunch
 sudo
@@ -71,6 +73,7 @@ vi
 vulkan-tools
 wget
 wl-clipboard
+xdg-desktop-portal
 xdg-user-dirs
 yay
 yay-debug
