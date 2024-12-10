@@ -93,4 +93,4 @@ cp -r ./scripts /mnt/archinstall
 # ------------------------------------------------------
 export nvidia
 export root
-arch-chroot /mnt ./archinstall/2-configuration.sh
+arch-chroot /mnt && ./archinstall/2-configuration.sh
