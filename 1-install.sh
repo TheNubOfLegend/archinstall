@@ -83,7 +83,6 @@ cat /mnt/etc/fstab
 # ------------------------------------------------------
 mkdir /mnt/archinstall
 cp 2-configuration.sh /mnt/archinstall/
-cp 3-yay.sh /mnt/archinstall/
 cp vital_packages.list /mnt/archinstall
 cp -r ./packages /mnt/archinstall
 cp -r ./scripts /mnt/archinstall
@@ -93,4 +92,4 @@ cp -r ./scripts /mnt/archinstall
 # ------------------------------------------------------
 export nvidia
 export root
-arch-chroot /mnt && ./archinstall/2-configuration.sh
+arch-chroot /mnt && /archinstall/2-configuration.sh
