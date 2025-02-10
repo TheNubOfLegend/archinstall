@@ -33,9 +33,42 @@ mkswap /dev/$swap
 # ------------------------------------------------------
 # Mount points for fs
 # ------------------------------------------------------
+# mount /dev/$root /mnt
+# mount --mkdir /dev/$efi /mnt/boot
+# swapon /dev/$swap
+
 mount /dev/$root /mnt
-mount --mkdir /dev/$efi /mnt/boot
+btrfs su cr /mnt/@
+btrfs su cr /mnt/@cache
+btrfs su cr /mnt/@home
+btrfs su cr /mnt/@log
+
+mount -o compress=zstd:1,noatime,subvol=@ /dev/$root /mnt
+mkdir -p /mnt/{boot/efi,home,var/{cache,log}}
+mount -o compress=zstd:1,noatime,subvol=@cache /dev/$root /mnt/var/cache
+mount -o compress=zstd:1,noatime,subvol=@home /dev/$root /mnt/home
+mount -o compress=zstd:1,noatime,subvol=@log /dev/$root /mnt/var/log
+mount /dev/$efi /mnt/boot/efi
+
 swapon /dev/$swap
+
+# TODO: look into this
+# mount /dev/$root /mnt
+# btrfs su cr /mnt/@
+# btrfs su cr /mnt/@cache
+# btrfs su cr /mnt/@home
+# btrfs su cr /mnt/@snapshots
+# btrfs su cr /mnt/@log
+# umount /mnt
+#
+# mount -o compress=zstd:1,noatime,subvol=@ /dev/$root /mnt
+# mkdir -p /mnt/{boot/efi,home,.snapshots,var/{cache,log}}
+# mount -o compress=zstd:1,noatime,subvol=@cache /dev/$root /mnt/var/cache
+# mount -o compress=zstd:1,noatime,subvol=@home /dev/$root /mnt/home
+# mount -o compress=zstd:1,noatime,subvol=@log /dev/$root /mnt/var/log
+# mount -o compress=zstd:1,noatime,subvol=@snapshots /dev/$root /mnt/.snapshots
+# mount /dev/$efi /mnt/boot/efi
+# TODO: look into this
 
 # ------------------------------------------------------
 # Install base packages
