@@ -14,7 +14,7 @@ zoneinfo="America/Chicago"
 hostname=""
 username="nub"
 
-root="(df --output=source / | grep /dev/)"
+root="(findmnt -no SOURCE /)"
 
 gpu_type=$(lspci)
 if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
@@ -73,7 +73,7 @@ pacman -Syy
 # ------------------------------------------------------
 # Install Packages
 # ------------------------------------------------------
-source "$(dirname "${BASH_SOURCE[0]}")/packages.sh"
+source "$(dirname $0)/packages.sh"
 
 # ------------------------------------------------------
 # Set Root Password
@@ -86,6 +86,9 @@ passwd root
 # ------------------------------------------------------
 echo "Add user $username"
 useradd -m -G wheel $username -s /bin/zsh
+
+echo ""
+echo "Password for $username:"
 passwd $username
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
@@ -98,10 +101,8 @@ sed -i 's/--sort age/--sort rate/g' /etc/xdg/reflector/reflector.conf
 sed -i 's/--latest 5/--latest 10/g' /etc/xdg/reflector/reflector.conf
 
 systemctl enable reflector.timer --now
-systemctl enable reflector.service --now
-
 systemctl enable paccache.timer --now
-systemctl enable paccache.service --now
+systemctl enable fstrim.timer
 
 # ------------------------------------------------------
 # Pacman
@@ -140,6 +141,7 @@ console-mode keep" > /boot/loader/loader.conf
 if nvidia; then
     sed -i 's/^MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
 fi
+sed -i 's/BINARIES=()/BINARIES=(btrfs)/g' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 # ------------------------------------------------------
