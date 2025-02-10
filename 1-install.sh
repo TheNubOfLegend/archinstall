@@ -13,6 +13,7 @@ echo "-----------------------------------------------------"
 # Enter partition names
 # ------------------------------------------------------
 lsblk
+echo "nvme0n1p6,7,8 for lap for testing"
 read -p "Enter the name of the EFI partition (e.g. sda1): " efi
 read -p "Enter the name of the ROOT partition (e.g. sda2): " root
 read -p "Enter the name of the SWAP partition (e.g. sda3): " swap
@@ -26,7 +27,7 @@ timedatectl set-ntp true
 # Format partitions
 # ------------------------------------------------------
 mkfs.fat -F 32 /dev/$efi
-mkfs.ext4 /dev/$root
+mkfs.btrfs -f /dev/$root
 mkswap /dev/$swap
 
 # ------------------------------------------------------
@@ -75,7 +76,7 @@ done
 # ------------------------------------------------------
 # Generate fstab
 # ------------------------------------------------------
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt > /mnt/etc/fstab
 cat /mnt/etc/fstab
 
 # ------------------------------------------------------
@@ -90,6 +91,4 @@ cp -r ./scripts /mnt/archinstall
 # ------------------------------------------------------
 # Chroot to installed sytem
 # ------------------------------------------------------
-export nvidia
-export root
-arch-chroot /mnt && /archinstall/2-configuration.sh
+arch-chroot /mnt ./archinstall/2-configuration.sh

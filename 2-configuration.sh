@@ -14,6 +14,13 @@ zoneinfo="America/Chicago"
 hostname=""
 username="nub"
 
+root="(df --output=source / | grep /dev/)"
+
+gpu_type=$(lspci)
+if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
+    nvidia=true
+fi
+
 # ------------------------------------------------------
 # Set System Time
 # ------------------------------------------------------
@@ -75,11 +82,12 @@ echo "Set root password"
 passwd root
 
 # ------------------------------------------------------
-# Add User
+# Add User & sudoers entry
 # ------------------------------------------------------
 echo "Add user $username"
 useradd -m -G wheel $username -s /bin/zsh
 passwd $username
+sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # ------------------------------------------------------
 # Enable Services
@@ -94,7 +102,6 @@ systemctl enable reflector.service --now
 
 systemctl enable paccache.timer --now
 systemctl enable paccache.service --now
-#systemctl enable acpid
 
 # ------------------------------------------------------
 # Pacman
@@ -102,12 +109,6 @@ systemctl enable paccache.service --now
 sed -i 's/#VerbosePkgLists/VerbosePkgLists/' /etc/pacman.conf
 sed -i 's/#Color/Color/' /etc/pacman.conf
 sed -i 's/#Misc options/#Misc options\nILoveCandy/' /etc/pacman.conf
-
-# ------------------------------------------------------
-# Add user to wheel
-# ------------------------------------------------------
-usermod -aG wheel $username
-sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # ------------------------------------------------------
 # nobeep
@@ -137,7 +138,7 @@ console-mode keep" > /boot/loader/loader.conf
 # Add nvidia for hyprland to mkinitcpio
 # ------------------------------------------------------
 if nvidia; then
-    sed -i 's/^MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /mnt/etc/mkinitcpio.conf
+    sed -i 's/^MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
 fi
 mkinitcpio -p linux
 
