@@ -2,6 +2,7 @@
 
 # Define the path to the list of packages
 universal_package_list_dir="$(dirname $0)/packages/universal.list"
+#TODO: add verification that <hostname>.list exists
 package_list_dir="$(dirname $0)/packages/$(cat /etc/hostname).list"
 package_list=()
 script_list=()
@@ -17,9 +18,9 @@ while read -r line; do
 done < <(cat $package_list_dir && cat $universal_package_list_dir)
 
 echo "Installing needed: "
-# echo ${package_list[@]}
+ echo ${package_list[@]}
 # echo ${script_list[@]}
-sudo pacman --noconfirm --needed -S $package_list
+sudo pacman --noconfirm --needed -S ${package_list[@]}
 # Remove packages not listed in the desired list
 # for package in $installed_packages; do
 #    if ! grep -q "^$package$" "$package_list"; then
